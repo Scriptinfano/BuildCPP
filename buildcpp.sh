@@ -192,6 +192,9 @@ chmod +x scripts/build.sh
 # 初始化git仓库
 git init .
 
+# 现在github远程仓库默认基本上都叫master，所以这里最好和远程的名字同步
+git config --global init.defaultBranch master
+
 # 打印成功消息
 echo "C++ 项目目录结构已生成！"
 
