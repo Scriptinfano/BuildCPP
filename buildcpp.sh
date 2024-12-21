@@ -7,7 +7,7 @@
 #!/bin/zsh
 
 # 创建目录结构
-mkdir -p .vscode bin include log res scripts src build
+mkdir -p .vscode bin include log res scripts src build libs
 mkdir -p src/impl
 
 # 创建必要的文件
@@ -111,6 +111,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(IMPL_DIR ${CMAKE_SOURCE_DIR}/src/impl)
 set(BIN_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(LIB_DIR ${CMAKE_SOURCE_DIR}/libs)
 
 # 设置全局可执行文件输出目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR})
@@ -121,8 +122,11 @@ include_directories(${INCLUDE_DIR})
 # 获取 src/impl 目录下的所有 .cpp 文件
 file(GLOB IMPL_FILES "${IMPL_DIR}/*.cpp")
 
-# 获取 src 目录下的所有 .cpp 文件（主程序文件，包含 main 函数）
+# 获取 src 目录下的所有 .cpp 文件（主程序文件，包LIB_DIR函数）
 file(GLOB SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
+
+# 获取动态库文件
+file(GLOB DYNAMIC_LIBS "${LIB_DIR}/*.so")
 
 # 为每个 src/*.cpp 创建一个可执行文件
 foreach(CPP_FILE ${SRC_FILES})
@@ -135,8 +139,24 @@ foreach(CPP_FILE ${SRC_FILES})
     # 可选：为每个目标设置单独的输出目录
     set_target_properties(${EXE_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR}
+        BUILD_RPATH ${LIB_DIR}
+        INSTALL_RPATH ${LIB_DIR}
     )
+
+
 endforeach()
+
+# 获取bin目录下的所有可执行文件
+file(GLOB EXECUTABLES "${CMAKE_SOURCE_DIR}/bin/*")
+
+# 为每一个可执行文件链接动态库文件
+foreach(EXECUTABLE ${EXECUTABLES})
+    # 遍历每个动态库
+    foreach(DYNAMIC_LIB ${DYNAMIC_LIBS})
+        target_link_libraries(${EXECUTABLE} ${DYNAMIC_LIB})
+    endforeach()
+endforeach()
+
 EOL
 
 # 创建一个简单的main.cpp
