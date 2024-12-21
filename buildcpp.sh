@@ -107,7 +107,8 @@ set(CMAKE_CXX_STANDARD 23)
 
 # 添加调试信息，再生成的目标文件中添加符号表，以便调试器可以解析变量名称和函数调用等信息
 set(CMAKE_BUILD_TYPE Debug)
-# 定义路径
+
+# 定义一些路径的名字
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(IMPL_DIR ${CMAKE_SOURCE_DIR}/src/impl)
 set(BIN_DIR ${CMAKE_SOURCE_DIR}/bin)
@@ -118,6 +119,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_DIR})
 
 # 包含头文件路径
 include_directories(${INCLUDE_DIR})
+link_directories(${LIB_DIR})
 
 # 获取 src/impl 目录下的所有 .cpp 文件
 file(GLOB IMPL_FILES "${IMPL_DIR}/*.cpp")
@@ -142,21 +144,8 @@ foreach(CPP_FILE ${SRC_FILES})
         BUILD_RPATH ${LIB_DIR}
         INSTALL_RPATH ${LIB_DIR}
     )
-
-
+    target_link_libraries(${EXE_NAME} ${DYNAMIC_LIBS})
 endforeach()
-
-# 获取bin目录下的所有可执行文件
-file(GLOB EXECUTABLES "${CMAKE_SOURCE_DIR}/bin/*")
-
-# 为每一个可执行文件链接动态库文件
-foreach(EXECUTABLE ${EXECUTABLES})
-    # 遍历每个动态库
-    foreach(DYNAMIC_LIB ${DYNAMIC_LIBS})
-        target_link_libraries(${EXECUTABLE} ${DYNAMIC_LIB})
-    endforeach()
-endforeach()
-
 EOL
 
 # 创建一个简单的main.cpp
