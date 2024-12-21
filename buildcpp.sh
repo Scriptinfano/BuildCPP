@@ -18,6 +18,7 @@ touch .vscode/settings.json
 touch .vscode/tasks.json
 touch .gitignore
 touch CMakeLists.txt
+touch README.md
 
 # 对.vscode的四个文件进行配置
 cat > .vscode/c_cpp_properties.json <<\EOL
@@ -162,13 +163,11 @@ EOL
 cat > scripts/rebuild_and_run.sh <<\EOL
 #!/bin/bash
 # 请在项目的根目录下执行此文件
-# 删除旧的构建文件
-rm -rf ./build/* ./bin/*
 
 # 重新生成构建文件。-S用于指定源代码目录（Source Directory），也就是包含 CMakeLists.txt 文件的目录，这是告诉 CMake 去哪里找构建配置文件；-B ./build 表示生成的构建文件将存储在 build 子目录中成构建文件
 cmake -S ./ -B ./build
 
-# 编译
+# 执行构建
 cmake --build ./build
 
 # 运行可执行文件
@@ -184,13 +183,11 @@ EOL
 cat > scripts/build.sh <<\EOL
 #!/bin/bash
 # 请在项目的根目录下执行此文件
-# 删除旧的构建文件
-rm -rf ./build/* ./bin/*
 
-# 重新生成构建文件
+# -S指定CMakeLists.txt所在目录，-B指定构建目录
 cmake -S ./ -B ./build
 
-# 编译
+# --build执行构建，支持增量构建
 cmake --build ./build
 EOL
 
