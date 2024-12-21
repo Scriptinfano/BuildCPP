@@ -192,8 +192,30 @@ chmod +x scripts/build.sh
 # 初始化git仓库
 git init .
 
-# 现在github远程仓库默认基本上都叫master，所以这里最好和远程的名字同步
-git config --global init.defaultBranch master
+# 检查是否为git设置了user.name，如果没有就要求用户输入，下面email是一样的
+USER_NAME=$(git config --global --get user.name)
+if [ -z "$USER_NAME" ]; then
+    echo "user.name is not set. Please enter your name:"
+    read -r INPUT_NAME
+    git config --global user.name "$INPUT_NAME"
+    echo "user.name has been set to '$INPUT_NAME'."
+else
+    echo "user.name is already set to '$USER_NAME'."
+fi
+
+# 检查是否设置 user.email
+USER_EMAIL=$(git config --global --get user.email)
+if [ -z "$USER_EMAIL" ]; then
+    echo "user.email is not set. Please enter your email:"
+    read -r INPUT_EMAIL
+    git config --global user.email "$INPUT_EMAIL"
+    echo "user.email has been set to '$INPUT_EMAIL'."
+else
+    echo "user.email is already set to '$USER_EMAIL'."
+fi
+
+# git较高的版本的默认分支名字是main，这里再设置一下
+git config --global init.defaultBranch main
 
 # 打印成功消息
 echo "C++ 项目目录结构已生成！"
