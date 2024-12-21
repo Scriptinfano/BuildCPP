@@ -7,7 +7,7 @@
 #!/bin/zsh
 
 # 创建目录结构
-mkdir -p .vscode bin include log res scripts src build libs
+mkdir -p .vscode bin include log res scripts src build libs etc
 mkdir -p src/impl
 
 # 创建必要的文件
@@ -28,7 +28,7 @@ cat > .vscode/c_cpp_properties.json <<\EOL
             "includePath": [
                 "${workspaceFolder}/include/" //TODO 根据需要调整include文件夹的位置
             ],
-            "defines": [], //TODO 宏定义相关配置 
+            "defines": [], //TODO 宏定义相关配置
             "compilerPath": "", //TODO 根据需要填写编译器的路径
             "cStandard": "c17",
             "cppStandard": "c++17",
@@ -134,7 +134,7 @@ file(GLOB DYNAMIC_LIBS "${LIB_DIR}/*.so")
 foreach(CPP_FILE ${SRC_FILES})
     # 获取文件名（不含路径和扩展名）
     get_filename_component(EXE_NAME ${CPP_FILE} NAME_WE)
-    
+
     # 添加可执行文件，将 IMPL_FILES 作为公共依赖链接到所有可执行文件
     add_executable(${EXE_NAME} ${CPP_FILE} ${IMPL_FILES})
 
