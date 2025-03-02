@@ -7,7 +7,7 @@
 #!/bin/zsh
 
 # 创建目录结构
-mkdir -p .vscode bin include log res scripts src build libs etc
+mkdir -p .vscode bin include log res scripts src build libs etc doc
 mkdir -p src/impl
 
 # 创建必要的文件
@@ -19,6 +19,7 @@ touch .vscode/tasks.json
 touch .gitignore
 touch CMakeLists.txt
 touch README.md
+touch doc/index.md
 
 # 对.vscode的四个文件进行配置
 cat > .vscode/c_cpp_properties.json <<\EOL
